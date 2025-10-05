@@ -43,12 +43,6 @@ export class GeoController {
         );
       }
 
-      const isValidateBrazilianCoordinates =
-        this.locationService.validateBrazilianCoordinates(bbox);
-      if (!isValidateBrazilianCoordinates) {
-        throw new BadRequestException('The selected area is outside Brazil');
-      }
-
       const center = this.locationService.calculateCenter(bbox);
 
       const area = this.locationService.calculateArea(bbox);
@@ -60,13 +54,6 @@ export class GeoController {
         center.lat,
         center.lon,
       );
-
-      if (!locationInfo.city) {
-        throw new HttpException(
-          'Error retrieving coordenates. Please insert the correct location data',
-          500,
-        );
-      }
 
       const bloomData = await this.bloomService.getBloomDataFromLocation(bbox);
 
@@ -101,12 +88,6 @@ export class GeoController {
         maxLon: lon + 0.1,
       };
 
-      const isValidateBrazilianCoordinates =
-        this.locationService.validateBrazilianCoordinates(bbox);
-      if (!isValidateBrazilianCoordinates) {
-        throw new BadRequestException('Location outside Brazil');
-      }
-
       this.logger.log(
         `Searching for flowering data for point (${lat}, ${lon})`,
       );
@@ -115,13 +96,6 @@ export class GeoController {
         lat,
         lon,
       );
-
-      if (!locationInfo.city) {
-        throw new HttpException(
-          'Error retrieving coordenates. Please insert the correct location data',
-          500,
-        );
-      }
 
       const bloomData = await this.bloomService.getBloomDataFromLocation(bbox);
 
