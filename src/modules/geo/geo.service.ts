@@ -4,20 +4,8 @@ import { firstValueFrom } from 'rxjs';
 import { Cache } from 'cache-manager';
 import { Inject } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
-
-export interface BoundingBox {
-  minLat: number;
-  minLon: number;
-  maxLat: number;
-  maxLon: number;
-}
-
-interface LocationInfo {
-  city?: string;
-  state?: string;
-  country?: string;
-  displayName?: string;
-}
+import { BoundingBox } from './types/raw-boundingBox';
+import { LocationInfo } from './types/raw-location-info';
 
 @Injectable()
 export class LocationService {

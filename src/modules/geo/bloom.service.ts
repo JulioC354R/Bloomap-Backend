@@ -1,28 +1,13 @@
 import { HttpService } from '@nestjs/axios';
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
-import { BoundingBox } from './geo.service';
-
-interface BloomRecord {
-  date: string;
-  ndvi: number;
-  cloudCover: number;
-}
-
-interface BloomResult {
-  status: 'none' | 'low' | 'medium' | 'high' | 'peak';
-  indice: number;
-  variacao: string;
-  tendencia: 'rising' | 'falling' | 'stable';
-  historico: BloomRecord[];
-  insight: string;
-}
+import { BoundingBox } from './types/raw-boundingBox';
+import { BloomRecord, BloomResult } from './types/raw-bloom-result';
 
 @Injectable()
-export class CompleteBloomService {
-  private readonly logger = new Logger(CompleteBloomService.name);
-  private readonly STAC_ENDPOINT =
-    'https://planetarycomputer.microsoft.com/api/stac/v1';
+export class BloomService {
+  private readonly logger = new Logger(BloomService.name);
+  private readonly STAC_ENDPOINT = process.env.PLANERATY_API_URL;
 
   constructor(private httpService: HttpService) {}
 
@@ -34,9 +19,11 @@ export class CompleteBloomService {
       now.toISOString().split('T')[0]
     }`;
 
+    const mountBbox = [bbox.minLon, bbox.minLat, bbox.maxLon, bbox.maxLat];
+
     const body = {
       collections: ['sentinel-2-l2a'],
-      bbox: bbox,
+      bbox: mountBbox,
       datetime: datetime,
       query: {
         'eo:cloud_cover': { lt: 30 },
@@ -113,6 +100,7 @@ export class CompleteBloomService {
   private estimateNdviFromMetadata(props: any): number {
     const cloud = props['eo:cloud_cover'] || 0;
     const base = 0.8;
+
     const ndvi = base * (1 - cloud / 100);
     return Math.max(0, Math.min(ndvi, 1));
   }
