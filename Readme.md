@@ -1,28 +1,49 @@
-📦 1. Instalação de Dependências
+# 🚀 BloomWatch Backend
 
-npm install
-npm install prisma --save-dev
-npm install @prisma/client
-npm install @nestjs/swagger swagger-ui-express # add --legacy-peer-deps if need
-npm install @nestjs/config
+Backend da aplicação BloomWatch desenvolvido em NestJS
 
-⚙️ 3. Configuração do Prisma
+---
 
-    3.1. Atualizar o Client:
+## 📦 Instalação das dependências
 
-    npx prisma init
+Para instalar as dependências do projeto, execute:
 
-    3.2. Rode a migração e gere o client:
+```bash
+npm install --legacy-peer-deps
+```
 
-    npx prisma migrate dev --name init && npx prisma generate dev
-
-⚙️ 4. Configuração das váriaveis de ambiente
+## ⚙️ Configuração das variáveis de ambiente
 
 Siga o modelo no .env.example para configura as váriaveis de ambientes.
 
-⚙️ 5. Executando o projeto
+## ▶️ Executando o projeto localmente
 
-Modo de desenvolvimento: npm run start:dev
-Modo de deploy: npm run start:prod
+Modo desenvolvimento:
 
-Acessar a url: http://localhost:3000/docs
+```bash
+npm run start:dev
+```
+
+Modo produção:
+
+```bash
+npm run start:prod
+```
+
+## 🐳 Executando com Docker
+
+1. Build da imagem Docker
+
+```bash
+docker build -t bloomwatch-backend .
+```
+
+2. Rodando o container Docker
+
+```bash
+docker run -p 3000:3000 --env-file .env bloomwatch-backend
+```
+
+3. Acesse a API no navegador utilizando o swagger:
+
+http://127.0.0.1:5000/docs

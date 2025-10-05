@@ -3,13 +3,19 @@ import { HttpException, Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { BoundingBox } from './types/raw-boundingBox';
 import { BloomRecord, BloomResult } from './types/raw-bloom-result';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class BloomService {
   private readonly logger = new Logger(BloomService.name);
-  private readonly STAC_ENDPOINT = process.env.PLANERATY_API_URL;
+  private readonly STAC_ENDPOINT: string;
 
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private httpService: HttpService,
+    private configService: ConfigService,
+  ) {
+    this.STAC_ENDPOINT = this.configService.get<string>('PLANERATY_API_URL');
+  }
 
   async getBloomDataFromLocation(bbox: BoundingBox): Promise<BloomResult> {
     const now = new Date();
